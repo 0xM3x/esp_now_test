@@ -4,15 +4,19 @@
 static const char *TAG = "RECEIVER";
 
 // Define the parameters for RSSI-to-distance conversion
-float A = -50;  // RSSI value at 1 meter (adjust based on your environment)
+float A = -40;  // Adjusted RSSI value at 1 meter (this value may need further tuning)
 float n = 2.5;   // Path loss exponent (adjust depending on your environment)
 
 // Define the distance range in meters (e.g., 30 cm = 0.3 meters)
 float distance_range = 0.3;  // 30 cm
 
 void on_receive(const esp_now_recv_info_t *recv_info, const uint8_t *data, int len) {
-    // Get the RSSI value of the received message
-    int rssi_value = WiFi.RSSI();
+    // Get the RSSI value of the received message from ESP-NOW
+    int rssi_value = recv_info->rssi;
+
+    // Print out the RSSI value
+    Serial.print("Received RSSI: ");
+    Serial.println(rssi_value);
 
     // Calculate the distance using the RSSI-to-distance formula
     float distance = calculate_distance(rssi_value);
